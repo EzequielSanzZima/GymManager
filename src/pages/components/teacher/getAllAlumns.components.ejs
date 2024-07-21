@@ -1,0 +1,13 @@
+<title>Alumnos / App</title>
+<div class="container">
+    <h1>Usuarios Registrados</h1>
+    <ul class="card">
+        <% if (users.length > 0) { %>
+            <% users.forEach(user => { %>
+                <li><%= user.firstName %> <%= user.lastName %></li>
+            <% }); %>
+        <% } else { %>
+            <p>No hay usuarios registrados.</p>
+        <% } %>
+    </ul>
+</div>

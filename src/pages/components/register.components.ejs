@@ -1,0 +1,108 @@
+<title>Registro / App</title>
+<div class="container register-container">
+    <h2 class="text-center">Register</h2>
+    <form action="/register" method="POST" enctype="multipart/form-data">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="firstName">First Name</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="lastName">Last Name</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    </div>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                </div>
+                <input type="email" class="form-control" id="email" name="email" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                </div>
+                <input type="password" class="form-control" id="password" name="password" required>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="birthdate" class="form-label">Birthdate</label>
+            <div class="row">
+                <div class="col">
+                    <input type="number" class="form-control" id="day" name="day" placeholder="Day" min="1" max="31" required>
+                </div>
+                <div class="col">
+                    <select class="form-select" id="month" name="month" required>
+                        <option value="1">Enero</option>
+                        <option value="2">Febrero</option>
+                        <option value="3">Marzo</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Mayo</option>
+                        <option value="6">Junio</option>
+                        <option value="7">Julio</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Septiembre</option>
+                        <option value="10">Octubre</option>
+                        <option value="11">Noviembre</option>
+                        <option value="12">Deciembre</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <input type="number" class="form-control" id="year" name="year" placeholder="Year" min="1930" max="2010" required>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="dni">DNI</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-id-badge"></i></span>
+                </div>
+                <input type="text" class="form-control" id="dni" name="dni" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="contactNumber">Contact Number</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                </div>
+                <input type="text" class="form-control" id="contactNumber" name="contactNumber" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="address">Address</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-home"></i></span>
+                </div>
+                <input type="text" class="form-control" id="address" name="address" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="avatar">Avatar</label>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text"><i class="fas fa-image"></i></span>
+                </div>
+                <input type="file" class="form-control" id="avatar" name="avatar" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </form>
+</div>

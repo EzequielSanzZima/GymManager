@@ -1,0 +1,40 @@
+<title>Tu cuenta / App</title>
+<% if (user) { %>
+    <% const birthdate = new Date(user.birthdate); %>
+    <% const formattedBirthdate = `${birthdate.getDate().toString().padStart(2, '0')}/${(birthdate.getMonth() + 1).toString().padStart(2, '0')}/${birthdate.getFullYear()}`; %>
+
+    <div class="container-fluid"> 
+        <div class="container card">
+            <h1>Cuenta de <%= user.firstName %> <%= user.lastName %></h1>
+        <div>
+            <p><strong>Rol:</strong> <%= user.rol %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Fecha de Nacimiento:</strong> <%= formattedBirthdate %></p>
+            <p><strong>DNI:</strong> <%= user.dni %></p>
+            <p><strong>Número de Contacto:</strong> <%= user.contactNumber %></p>
+            <p><strong>Dirección:</strong> <%= user.address %></p>
+        </div>
+        <div class="d-flex pb-2">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
+                Cambiar Contraseña
+            </button>
+            <div class="ps-2">
+                <button class="btn btn-danger" id="deleteAccountBtn">Eliminar Cuenta</button>
+            </div>
+        </div>
+        </div>
+
+        <%- include('./modals/deleteaccount.modal.ejs') %>
+        <%- include('./modals/changepassword.modal.ejs') %>
+    </div>
+
+
+
+<% } else { %>
+    <p>Usuario no autenticado.</p>
+<% } %>
+
+<script type="text/javascript" src="js/deleteaccout.js"></script>
+<script type="text/javascript" src="js/changepassword.js"></script>
+<script src="/path/to/bootstrap.js"></script>
+<script src="/path/to/jquery.js"></script>

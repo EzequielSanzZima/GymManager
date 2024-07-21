@@ -1,0 +1,67 @@
+<div class="sidebar">
+    <% if (user) { %>
+        <div class="text-center pb-5 pt-5 ">
+            <a href="/"><h3>NavBar</h3></a>
+        </div>
+        <div class="text-center mb-4">
+            <img src="/avatar/<%= user._id %>" alt="Imagen de perfil" class="profile-img"/>
+            <div class="profile-info pt-3 d-flex flex-column">
+                <div>
+                    <h3 class="tittleWelcome">Bienvenido,</h3>
+                    <p><%= user.rol %></p>
+                </div>
+                
+                    <div class="d-flex flex-column nameleftbar">
+                        <span><%= user.firstName %> </span>
+                        <span><%= user.lastName %></span>
+                    </div>
+            </div>
+        </div>
+        <ul class="nav flex-column text-center">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="webDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Páginas
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="webDropdown">
+                    <li><a class="dropdown-item" href="#">Home</a></li>
+                    <li><a class="dropdown-item" href="#">Precio</a></li>
+                </ul>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Usuario
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                    <li><a class="dropdown-item" href="/settings">Configuración</a></li>
+                    <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                </ul>
+            </li>
+            <% if (user.rol === 'Profesor') { %>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="gestorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Gestor
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="gestorDropdown">
+                        <li><a class="dropdown-item" href="/alumns">Alumnos</a></li>
+                    </ul>
+                </li>
+            <% } %>
+        </ul>
+    <% } else { %>
+        <ul class="nav flex-column">
+            <div class="text-center pb-5 pt-5 ">
+                <a href="/"><h3>NavBar</h3></a>
+            </div>
+            <p><a href="/" class="nav-link a">Home</a></p>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="authDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Autenticación
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="authDropdown">
+                    <li><a class="dropdown-item" href="/login">Iniciar sesión</a></li>
+                    <li><a class="dropdown-item" href="/register">Registrarse</a></li>
+                </ul>
+            </li>
+        </ul>
+    <% } %>
+</div>
