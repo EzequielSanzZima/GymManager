@@ -1,9 +1,8 @@
 const ensureRole = (role) => {
     return (req, res, next) => {
-        if (req.user && req.user.rol === role) {
+        if (req.user && role.includes(req.user.rol)) {
             return next();
         } else {
-            req.flash('error_msg', 'No tienes permiso para acceder a esta página.');
             return res.redirect('/');
         }
     };

@@ -1,0 +1,14 @@
+<div class="container mt-4">
+    <ul id="messages" class="list-unstyled"></ul>
+  </div>
+  <div id="form-container" class="fixed-bottom p-3 bg-light shadow-sm formChat">
+    <form id="form" class="d-flex align-items-center">
+      <input id="name" type="hidden" value="<%= user.firstName %>" />
+      <input id="surname" type="hidden" value="<%= user.lastName %>" />
+      <input id="input" class="form-control mr-2" placeholder="Message" autocomplete="off" />
+      <button class="btn btn-primary">Enviar</button>
+    </form>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="js/teacherJS/chat.js"></script>

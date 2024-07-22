@@ -1,5 +1,7 @@
 require('dotenv').config();
 const express = require("express");
+const { Server } = require('socket.io');
+const { createServer } = require('node:http');
 const mongoose = require("mongoose");
 const passport = require("passport");
 const bodyParser = require("body-parser");
@@ -9,9 +11,11 @@ const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
 const LocalStrategy = require("passport-local").Strategy;
 const User = require("./js/auth/user.js");
+const setupSocket = require("./js/middleware/socketio.js")
 
 const app = express();
 require("./js/auth/passport.js");
+const server = createServer(app);
 const setUser = require("./js/middleware/setUser.js");
 
 const Mongo_URL = process.env.MONGO_URL;
@@ -30,7 +34,6 @@ app.use(cookieParser(secret));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Es importante que el middleware de sesión se configure antes de connect-flash
 app.use(session({
     secret: secret,
     resave: false,
@@ -38,14 +41,12 @@ app.use(session({
     cookie: { secure: false }
 }));
 
-// Configurar flash después de la sesión
 app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(setUser);
 
-// Middleware para pasar flash messages a las vistas
 app.use(function(req, res, next) {
     res.locals.success_msg = req.flash('success_msg');
     res.locals.error_msg = req.flash('error_msg');
@@ -60,16 +61,14 @@ const authRoutes = require("./js/routes/auth.js");
 app.use(routes);
 app.use(authRoutes);
 
-
-
 mongoose.connect(Mongo_URL, {
-    useUnifiedTopology: true,
-    useNewUrlParser: true
 }).then(() => {
     console.log("MongoDB connected");
 }).catch(err => console.log(err));
 
+
+setupSocket(server);
 // Iniciar el servidor
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

@@ -8,7 +8,6 @@ body {
 }
 .register-container {
     background: white;
-    padding: 30px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -62,6 +61,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    flex-shrink: 0;
+    overflow-y: auto;
 }
 .sidebar .nav-link {
     color: #fff;
@@ -98,7 +99,7 @@ body {
     text-align: center;
 }
 .dropdown-menu {
-    top: 50px; /* Ajusta según sea necesario para la distancia desde el botón */
+    top: 50px;
 }
 .nameleftbar{
     font-size: 1.25rem;
@@ -106,4 +107,10 @@ body {
 }
 .a{
     text-decoration: none;
+}
+
+//chat
+.formChat{
+    position: fixed;
+    left: 29.4vh;
 }

@@ -1,4 +1,4 @@
-<div class="sidebar">
+<div class="sidebar ps-0">
     <% if (user) { %>
         <div class="text-center pb-5 pt-5 ">
             <a href="/"><h3>NavBar</h3></a>
@@ -23,7 +23,7 @@
                     Páginas
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="webDropdown">
-                    <li><a class="dropdown-item" href="#">Home</a></li>
+                    <li><a class="dropdown-item" href="/">Home</a></li>
                     <li><a class="dropdown-item" href="#">Precio</a></li>
                 </ul>
             </li>
@@ -36,13 +36,25 @@
                     <li><a class="dropdown-item" href="/logout">Logout</a></li>
                 </ul>
             </li>
-            <% if (user.rol === 'Profesor') { %>
+            <% if (user.rol == 'Profesor' || user.rol === 'Secretario') { %>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="gestorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Gestor
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="gestorDropdown">
                         <li><a class="dropdown-item" href="/alumns">Alumnos</a></li>
+                        <li><a class="dropdown-item" href="/teacherchat">Chat</a></li>
+                    </ul>
+                </li>
+            <% } %>
+            <% if (user.rol === 'Secretario') { %>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="gestorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Secretaria
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="gestorDropdown">
+                        <li><a class="dropdown-item" href="/alumns">Usuarios registrados</a></li>
+                        <li><a class="dropdown-item" href="/teacherchat">Chat</a></li>
                     </ul>
                 </li>
             <% } %>

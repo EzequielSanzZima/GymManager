@@ -43,6 +43,12 @@ const UserSchema = new Schema({
     },
     rol: {
         type: String,
+    },
+    registerTime: {
+        type: String,
+    },
+    pass:{
+        type: String,
     }
 });
 

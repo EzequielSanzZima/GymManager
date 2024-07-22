@@ -6,7 +6,6 @@ const User = require("../auth/user.js");
 const { ensureAuthenticated, ensureNotAuthenticated } = require("../middleware/authenticated.js");
 const ensureRole = require("../middleware/checkrole.js");
 
-// Usa el router de autenticación en las rutas correspondientes
 router.use("/auth", authRoutes);
 
 router.get("/", (req, res) => {
@@ -22,11 +21,11 @@ router.get("/login", ensureNotAuthenticated, (req, res) => {
     });
 });
 
-router.get('/settings', ensureRole('Profesor', 'Alumno'),(req, res) => {
+router.get('/settings', ensureRole(['Profesor', 'Alumno', 'Secretario']),(req, res) => {
     res.render('settings', { user: req.user });
 });
 
-router.get("/register", ensureNotAuthenticated, (req, res) => {
+router.get("/register", (req, res) => {
     res.render("register", { user: req.user });
 });
 
@@ -55,7 +54,7 @@ router.get("/avatar/:id", async (req, res) => {
     }
 });
 
-router.get("/alumns", ensureRole('Profesor'), async (req, res) => {
+router.get("/alumns", ensureRole(['Profesor', 'Secretario']), async (req, res) => {
     try {
         const users = await User.find({}, 'firstName lastName');
         res.render('alumnAll', { users, user: req.user });
@@ -64,5 +63,9 @@ router.get("/alumns", ensureRole('Profesor'), async (req, res) => {
         res.status(500).send('Error retrieving users');
     }
 });
+
+router.get("/teacherchat", ensureRole(['Profesor', 'Secretario']), (req, res) =>{
+    res.render('teacherChat', { user: req.user });
+})
 
 module.exports = router;

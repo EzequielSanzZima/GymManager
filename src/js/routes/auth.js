@@ -7,15 +7,15 @@ const multer = require('multer');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+const timeInArgentina = require("../repeat/timeInArgentina.js")
 
 // Manejar el registro de usuarios
 router.post("/register", upload.single('avatar'),async (req, res) => {
     try {
-        const { email, password, firstName, lastName, day, month, year, dni, contactNumber, address } = req.body;
+        const { email, password, firstName, lastName, day, month, year, dni, contactNumber, address, rol, pass } = req.body;
 
-        const rol = 'Alumno'
         const birthdate = new Date(`${year}/${month}/${day}`);
-
+        const time = timeInArgentina();
         let existingDNI = await User.findOne({ dni });
         let existingUser = await User.findOne({ email });
         if (existingUser) {
@@ -38,7 +38,9 @@ router.post("/register", upload.single('avatar'),async (req, res) => {
             dni,
             contactNumber,
             address,
-            avatar: req.file.buffer
+            avatar: req.file.buffer,
+            registerTime: time,
+            pass
         });
 
         await newUser.save();
@@ -54,9 +56,7 @@ router.post("/register", upload.single('avatar'),async (req, res) => {
 
 // Manejar el login de usuarios manualmente
 router.post('/login', async (req, res) => {
-    console.log('Request body:', req.body);  // Verifica si req.body está vacío
     const { dni, password } = req.body;
-    console.log(dni, password);
 
         // if (!dni || !password) {
         //     req.flash('error_msg', 'DNI y contraseña son requeridos');
@@ -83,7 +83,8 @@ router.post('/login', async (req, res) => {
                 return res.redirect('/login');
             }
 
-            res.cookie('name', user.firstName, { maxAge: 900000, httpOnly: true });
+            req.session.userId = user._id
+            res.cookie('name', user.firstName, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true });
 
             req.flash('success_msg', 'Successfully logged in');
             return res.redirect('/');
@@ -139,7 +140,6 @@ router.post('/change-password', async (req, res) => {
             return res.status(401).json({ error: 'Usuario no autenticado.' });
         }
 
-        // Verificar la contraseña actual
         const isMatch = await bcrypt.compare(currentPassword, user.password);
 
         if (!isMatch) {
@@ -150,15 +150,12 @@ router.post('/change-password', async (req, res) => {
             return res.status(401).json({ error: 'Ingresa otra nueva contraseña.' });
         }
 
-        // Encriptar la nueva contraseña
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-        // Actualizar la contraseña en la base de datos
         user.password = hashedPassword;
         await user.save();
 
-        // Responder con éxito
         res.json({ message: 'Contraseña cambiada con éxito.' });
 
     } catch (error) {
