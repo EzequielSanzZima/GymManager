@@ -1,0 +1,36 @@
+<title>DNI: <%= user.dni %> / App</title>
+<% const birthdate = new Date(user.birthdate); %>
+<% const formattedBirthdate = `${birthdate.getDate().toString().padStart(2, '0')}/${(birthdate.getMonth() + 1).toString().padStart(2, '0')}/${birthdate.getFullYear()}`; %>
+
+
+<div class="container mt-5 card card-body">
+    <h1 class="m-0">Perfil de Cliente</h1>
+    <hr class="bg-dark border-2 border-top border-dark">
+    <% if (user) { %>
+        <div class="ps-3">
+            <div class=" d-flex">
+                <img src="/avatar/<%= user._id %>" alt="Imagen de Perfil" width="72px" height="72px">
+                <h2 class="card-title ps-2 d-flex align-items-center"><%= user.firstName %> <%= user.lastName %></h2>
+            </div>
+            <hr class="bg-dark border-2 border-top border-dark">
+            <div>
+                <p><strong>Rol:</strong> <%= user.rol %></p>
+                <p><strong>Email:</strong> <%= user.email %></p>
+                <p><strong>Fecha de Nacimiento:</strong> <%= formattedBirthdate %></p>
+                <p><strong>DNI:</strong> <%= user.dni %></p>
+                <p><strong>Número de Contacto:</strong> <%= user.contactNumber %></p>
+                <p><strong>Dirección:</strong> <%= user.address %></p>
+                <p><strong>Dia de registro:</strong> <%= user.registerTime %></p>
+                <p><strong>Pase:</strong> <%= user.pass %></p>
+                <% if (user.hasPaid === false) { %>
+                    <p></p><strong>Pago:</strong> El cliente no pagó el mes.</p>
+                <% } else { %>
+                    <p></p><strong>Pago:</strong> El cliente pagó el mes. El pase se vence el: <%= nextPayMount %></p>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <% } else { %>
+        <p>No se encontró el cliente.</p>
+    <% } %>
+</div>

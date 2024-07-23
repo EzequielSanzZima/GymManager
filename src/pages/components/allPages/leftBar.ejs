@@ -1,19 +1,19 @@
 <div class="sidebar ps-0">
-    <% if (user) { %>
+    <% if (currentUser) { %>
         <div class="text-center pb-5 pt-5 ">
             <a href="/"><h3>NavBar</h3></a>
         </div>
         <div class="text-center mb-4">
-            <img src="/avatar/<%= user._id %>" alt="Imagen de perfil" class="profile-img"/>
+            <img src="/avatar/<%= currentUser._id %>" alt="Imagen de perfil" class="profile-img"/>
             <div class="profile-info pt-3 d-flex flex-column">
                 <div>
                     <h3 class="tittleWelcome">Bienvenido,</h3>
-                    <p><%= user.rol %></p>
+                    <p><%= currentUser.rol %></p>
                 </div>
                 
                     <div class="d-flex flex-column nameleftbar">
-                        <span><%= user.firstName %> </span>
-                        <span><%= user.lastName %></span>
+                        <span><%= currentUser.firstName %> </span>
+                        <span><%= currentUser.lastName %></span>
                     </div>
             </div>
         </div>
@@ -36,7 +36,7 @@
                     <li><a class="dropdown-item" href="/logout">Logout</a></li>
                 </ul>
             </li>
-            <% if (user.rol == 'Profesor' || user.rol === 'Secretario') { %>
+            <% if (currentUser.rol == 'Profesor' || currentUser.rol === 'Secretario') { %>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="gestorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Gestor
@@ -47,13 +47,13 @@
                     </ul>
                 </li>
             <% } %>
-            <% if (user.rol === 'Secretario') { %>
+            <% if (currentUser.rol === 'Secretario') { %>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="gestorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Secretaria
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="gestorDropdown">
-                        <li><a class="dropdown-item" href="/alumns">Usuarios registrados</a></li>
+                        <li><a class="dropdown-item" href="/clients">Usuarios registrados</a></li>
                         <li><a class="dropdown-item" href="/teacherchat">Chat</a></li>
                     </ul>
                 </li>

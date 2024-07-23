@@ -1,0 +1,13 @@
+<title>Clientes / App</title>
+<div class="container">
+    <h1>Clientes</h1>
+    <ul class="card">
+        <% if (users.length > 0) { %>
+            <% users.forEach(user => { %>
+                <li><a href="/clients/<%= user.dni %>"><%= user.firstName %> <%= user.lastName %> DNI: <%= user.dni %></a></li>
+            <% }); %>
+        <% } else { %>
+            <p>No hay usuarios registrados.</p>
+        <% } %>
+    </ul>
+</div>

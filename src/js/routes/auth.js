@@ -4,25 +4,29 @@ const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const User = require("../auth/user.js");
 const multer = require('multer');
+const passport = require('passport');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const timeInArgentina = require("../repeat/timeInArgentina.js")
 
 // Manejar el registro de usuarios
-router.post("/register", upload.single('avatar'),async (req, res) => {
+router.post("/register", upload.single('avatar'), async (req, res) => {
     try {
-        const { email, password, firstName, lastName, day, month, year, dni, contactNumber, address, rol, pass } = req.body;
+        const { email, password, firstName, lastName, day, month, year, dni, contactNumber, address, rol, pass, hasPaid } = req.body;
 
-        const birthdate = new Date(`${year}/${month}/${day}`);
+        const birthdate = new Date(`${year}-${month}-${day}`);
         const time = timeInArgentina();
+        const hasPaidBool = hasPaid === 'Yes'
+        const paymentDate = hasPaidBool ? timeInArgentina() : null;
+
         let existingDNI = await User.findOne({ dni });
         let existingUser = await User.findOne({ email });
         if (existingUser) {
-            req.flash('error_msg', 'email already exists');
+            req.flash('error_msg', 'Email already exists');
             return res.redirect("/register");
         }
-        if (existingDNI){
+        if (existingDNI) {
             req.flash('error_msg', 'DNI already exists');
             return res.redirect("/register");
         }
@@ -40,22 +44,26 @@ router.post("/register", upload.single('avatar'),async (req, res) => {
             address,
             avatar: req.file.buffer,
             registerTime: time,
-            pass
+            pass,
+            hasPaid: hasPaidBool,
+            paymentDate,
         });
-
+        
         await newUser.save();
+        
         req.flash('success_msg', 'You are now registered and can log in');
         res.redirect("/login");
     } catch (error) {
-        console.log(error)
-        req.flash('error_msg', error.message);
+        console.log(error);
+        req.flash('error_msg', 'An error occurred: ' + error.message);
         res.redirect("/register");
     }
 });
 
 
+
 // Manejar el login de usuarios manualmente
-router.post('/login', async (req, res) => {
+router.post('/login', passport.authenticate('local') ,async (req, res) => {
     const { dni, password } = req.body;
 
         // if (!dni || !password) {

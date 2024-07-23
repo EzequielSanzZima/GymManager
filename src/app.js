@@ -23,9 +23,9 @@ const secret = process.env.SECRET;
 const PORT = process.env.PORT || 3000;
 
 // Configuración de Passport
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+// passport.use(new LocalStrategy(User.authenticate()));
+// passport.serializeUser(User.serializeUser());
+// passport.deserializeUser(User.deserializeUser());
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(process.cwd(), 'src/pages/routes'));
@@ -45,7 +45,7 @@ app.use(flash());
 
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(setUser);
+// app.use(setUser);
 
 app.use(function(req, res, next) {
     res.locals.success_msg = req.flash('success_msg');
@@ -66,6 +66,11 @@ mongoose.connect(Mongo_URL, {
     console.log("MongoDB connected");
 }).catch(err => console.log(err));
 
+
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+});
 
 setupSocket(server);
 // Iniciar el servidor

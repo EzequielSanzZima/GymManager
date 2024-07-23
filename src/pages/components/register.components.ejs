@@ -1,7 +1,8 @@
-<div class="container register-container">
+<title>Registrar / App</title>
+<div class="container register-container p-3">
     <h2 class="text-center mb-4">Registro</h2>
     <form action="/register" method="POST" enctype="multipart/form-data">
-        <div class="form-row">
+        <div class="form-row d-flex">
             <div class="form-group col-md-6">
                 <label for="firstName">Nombre</label>
                 <div class="input-group">
@@ -11,7 +12,7 @@
                     <input type="text" class="form-control" id="firstName" name="firstName" required>
                 </div>
             </div>
-            <div class="form-group col-md-6">
+            <div class="form-group col-md-6 ps-3">
                 <label for="lastName">Apellido</label>
                 <div class="input-group">
                     <div class="input-group-prepend">
@@ -41,11 +42,11 @@
         </div>
         <div class="form-group">
             <label for="birthdate">Fecha de Nacimiento</label>
-            <div class="form-row">
+            <div class="form-row d-flex">
                 <div class="col">
                     <input type="number" class="form-control" id="day" name="day" placeholder="Día" min="1" max="31" required>
                 </div>
-                <div class="col">
+                <div class="col ps-3">
                     <select class="form-control" id="month" name="month" required>
                         <option value="1">Enero</option>
                         <option value="2">Febrero</option>
@@ -61,7 +62,7 @@
                         <option value="12">Diciembre</option>
                     </select>
                 </div>
-                <div class="col">
+                <div class="col ps-3">
                     <input type="number" class="form-control" id="year" name="year" placeholder="Año" min="1900" max="2023" required>
                 </div>
             </div>
@@ -132,6 +133,17 @@
                     <span class="input-group-text"><i class="fas fa-image"></i></span>
                 </div>
                 <input type="file" class="form-control" id="avatar" name="avatar" required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="rol">Pago</label>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="hasPaid1" name="hasPaid" value="Yes" required>
+                <label class="form-check-label" for="hasPaid1">Si</label>
+            </div>
+            <div class="form-check">
+                <input type="radio" class="form-check-input" id="hasPaid2" name="hasPaid" value="No" required>
+                <label class="form-check-label" for="hasPaid2">No</label>
             </div>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Registrar</button>

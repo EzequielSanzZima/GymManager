@@ -49,10 +49,20 @@ const UserSchema = new Schema({
     },
     pass:{
         type: String,
+    },
+    hasPaid: {
+        type: Boolean,
+        default: false
+    },
+    paymentDate: {
+        type: String,
+    },
+    nextPayDate: {
+        type: String,
     }
 });
 
-UserSchema.plugin(passportLocalMongoose);
+UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
 
 let User;
 if (mongoose.models.User) {

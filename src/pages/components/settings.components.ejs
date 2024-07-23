@@ -1,20 +1,20 @@
 <title>Tu cuenta / App</title>
-<% if (user) { %>
-    <% const birthdate = new Date(user.birthdate); %>
+<% if (currentUser) { %>
+    <% const birthdate = new Date(currentUser.birthdate); %>
     <% const formattedBirthdate = `${birthdate.getDate().toString().padStart(2, '0')}/${(birthdate.getMonth() + 1).toString().padStart(2, '0')}/${birthdate.getFullYear()}`; %>
 
     <div class="container-fluid"> 
         <div class="container card">
-            <h1>Cuenta de <%= user.firstName %> <%= user.lastName %></h1>
+            <h1>Cuenta de <%= currentUser.firstName %> <%= currentUser.lastName %></h1>
         <div>
-            <p><strong>Rol:</strong> <%= user.rol %></p>
-            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Rol:</strong> <%= currentUser.rol %></p>
+            <p><strong>Email:</strong> <%= currentUser.email %></p>
             <p><strong>Fecha de Nacimiento:</strong> <%= formattedBirthdate %></p>
-            <p><strong>DNI:</strong> <%= user.dni %></p>
-            <p><strong>Número de Contacto:</strong> <%= user.contactNumber %></p>
-            <p><strong>Dirección:</strong> <%= user.address %></p>
-            <p><strong>Dia de registro:</strong> <%= user.registerTime %></p>
-            <p><strong>Pase:</strong> <%= user.pass %></p>
+            <p><strong>DNI:</strong> <%= currentUser.dni %></p>
+            <p><strong>Número de Contacto:</strong> <%= currentUser.contactNumber %></p>
+            <p><strong>Dirección:</strong> <%= currentUser.address %></p>
+            <p><strong>Dia de registro:</strong> <%= currentUser.registerTime %></p>
+            <p><strong>Pase:</strong> <%= currentUser.pass %></p>
         </div>
         <div class="d-flex pb-2">
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">

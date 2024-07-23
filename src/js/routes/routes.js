@@ -5,16 +5,17 @@ const authRoutes = require("../routes/auth.js");
 const User = require("../auth/user.js");
 const { ensureAuthenticated, ensureNotAuthenticated } = require("../middleware/authenticated.js");
 const ensureRole = require("../middleware/checkrole.js");
+const moment = require("moment")
 
 router.use("/auth", authRoutes);
 
 router.get("/", (req, res) => {
-    res.render("home", { user: req.user });
+    res.render("home", { currentUser: req.user });
 });
 
-router.get("/login", ensureNotAuthenticated, (req, res) => {
+router.get("/login", (req, res) => {
     res.render("login", { 
-        user: req.user, 
+        currentUser: req.user, 
         success_msg: req.flash('success_msg'),
         error_msg: req.flash('error_msg'),
         error: req.flash('error')
@@ -22,11 +23,11 @@ router.get("/login", ensureNotAuthenticated, (req, res) => {
 });
 
 router.get('/settings', ensureRole(['Profesor', 'Alumno', 'Secretario']),(req, res) => {
-    res.render('settings', { user: req.user });
+    res.render('settings', { currentUser: req.user });
 });
 
 router.get("/register", (req, res) => {
-    res.render("register", { user: req.user });
+    res.render("register", { currentUser: req.user });
 });
 
 router.get("/logout", ensureAuthenticated, (req, res) => {
@@ -57,7 +58,7 @@ router.get("/avatar/:id", async (req, res) => {
 router.get("/alumns", ensureRole(['Profesor', 'Secretario']), async (req, res) => {
     try {
         const users = await User.find({}, 'firstName lastName');
-        res.render('alumnAll', { users, user: req.user });
+        res.render('alumnAll', { users, currentUser: req.user });
     } catch (error) {
         console.error(error);
         res.status(500).send('Error retrieving users');
@@ -65,7 +66,53 @@ router.get("/alumns", ensureRole(['Profesor', 'Secretario']), async (req, res) =
 });
 
 router.get("/teacherchat", ensureRole(['Profesor', 'Secretario']), (req, res) =>{
-    res.render('teacherChat', { user: req.user });
+    res.render('teacherChat', { currentUser: req.user });
 })
+
+
+//Secretaria
+router.get("/clients", ensureRole(['Secretario']), async (req, res) => {
+    try {
+        const users = await User.find({}, 'firstName lastName dni');
+        res.render('foundsClients', { users, currentUser: req.user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Error retrieving users');
+    }
+});
+
+router.get("/clients/:dni", async (req, res) => {
+    try {
+        const { dni } = req.params;
+        const user = await User.findOne({ dni });
+
+        if (!user) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+        let nextPay = user.paymentDate;
+        if (typeof nextPay === 'string') {
+            nextPay = moment(nextPay, 'DD/MM/YYYY HH:mm A').toDate();
+        }
+
+        const newDate = nextPay ? moment(nextPay).add(1, 'month') : moment().add(1, 'month');
+        const day = newDate.date();
+        const month = newDate.month() + 1;
+        const year = newDate.year();
+
+        const nextPayMount = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+
+        await User.updateOne(
+            { dni },
+            { $set: { nextPayDate: nextPayMount } }
+        );
+
+        res.render('clientData', { user, currentUser: req.user, nextPayMount });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Error retrieving client');
+    }
+});
+
+
 
 module.exports = router;
