@@ -1,7 +1,7 @@
 const socketIo = require('socket.io');
 const fs = require('fs');
 const path = require('path');
-const timeInArgentina = require('../repeat/timeInArgentina.js');
+const timeInArgentina = require('../utils/timeInArgentina.js');
 
 const chatHistoryPath = path.join(__dirname, '../../../chatHistory.json');
 

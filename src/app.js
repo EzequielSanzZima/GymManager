@@ -10,13 +10,11 @@ const path = require('path');
 const cookieParser = require("cookie-parser");
 const flash = require("connect-flash");
 const LocalStrategy = require("passport-local").Strategy;
-const User = require("./js/auth/user.js");
 const setupSocket = require("./js/middleware/socketio.js")
 
 const app = express();
 require("./js/auth/passport.js");
 const server = createServer(app);
-const setUser = require("./js/middleware/setUser.js");
 
 const Mongo_URL = process.env.MONGO_URL;
 const secret = process.env.SECRET;

@@ -125,4 +125,12 @@ body {
   left: 29.4vh;
 }
 
+.alert {
+  display: none;
+}
+
+.alert.show {
+  display: block;
+}
+
 /*# sourceMappingURL=main.css.map */

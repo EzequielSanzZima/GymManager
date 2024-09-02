@@ -8,7 +8,7 @@ const passport = require('passport');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const timeInArgentina = require("../repeat/timeInArgentina.js")
+const timeInArgentina = require("../utils/timeInArgentina.js")
 
 // Manejar el registro de usuarios
 router.post("/register", upload.single('avatar'), async (req, res) => {
@@ -17,7 +17,7 @@ router.post("/register", upload.single('avatar'), async (req, res) => {
 
         const birthdate = new Date(`${year}-${month}-${day}`);
         const time = timeInArgentina();
-        const hasPaidBool = hasPaid === 'Yes'
+        const hasPaidBool = hasPaid === 'Yes';
         const paymentDate = hasPaidBool ? timeInArgentina() : null;
 
         let existingDNI = await User.findOne({ dni });

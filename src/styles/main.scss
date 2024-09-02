@@ -114,3 +114,12 @@ body {
     position: fixed;
     left: 29.4vh;
 }
+
+
+//register
+.alert {
+    display: none;
+}
+.alert.show {
+    display: block;
+}

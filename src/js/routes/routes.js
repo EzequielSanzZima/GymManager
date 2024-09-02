@@ -5,6 +5,7 @@ const authRoutes = require("../routes/auth.js");
 const User = require("../auth/user.js");
 const { ensureAuthenticated, ensureNotAuthenticated } = require("../middleware/authenticated.js");
 const ensureRole = require("../middleware/checkrole.js");
+const { calculateNextPayDate } = require("../utils/AddMountPay.js")
 const moment = require("moment")
 
 router.use("/auth", authRoutes);
@@ -22,8 +23,11 @@ router.get("/login", (req, res) => {
     });
 });
 
-router.get('/settings', ensureRole(['Profesor', 'Alumno', 'Secretario']),(req, res) => {
-    res.render('settings', { currentUser: req.user });
+router.get('/settings', ensureRole(['Profesor', 'Alumno', 'Secretario']), async(req, res) => {
+    const { dni } = req.params;
+    const user = User.findOne({ dni });
+    const nextPayMount = calculateNextPayDate(user.paymentDate);
+    res.render('settings', { currentUser: req.user, nextPayMount });
 });
 
 router.get("/register", (req, res) => {
@@ -81,7 +85,7 @@ router.get("/clients", ensureRole(['Secretario']), async (req, res) => {
     }
 });
 
-router.get("/clients/:dni", async (req, res) => {
+router.get("/clients/:dni", ensureRole(['Secretario']), async (req, res) => {
     try {
         const { dni } = req.params;
         const user = await User.findOne({ dni });
@@ -89,22 +93,7 @@ router.get("/clients/:dni", async (req, res) => {
         if (!user) {
             return res.status(404).send('Usuario no encontrado');
         }
-        let nextPay = user.paymentDate;
-        if (typeof nextPay === 'string') {
-            nextPay = moment(nextPay, 'DD/MM/YYYY HH:mm A').toDate();
-        }
-
-        const newDate = nextPay ? moment(nextPay).add(1, 'month') : moment().add(1, 'month');
-        const day = newDate.date();
-        const month = newDate.month() + 1;
-        const year = newDate.year();
-
-        const nextPayMount = `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
-
-        await User.updateOne(
-            { dni },
-            { $set: { nextPayDate: nextPayMount } }
-        );
+        const nextPayMount = calculateNextPayDate(user.paymentDate);
 
         res.render('clientData', { user, currentUser: req.user, nextPayMount });
     } catch (err) {
@@ -112,6 +101,8 @@ router.get("/clients/:dni", async (req, res) => {
         res.status(500).send('Error retrieving client');
     }
 });
+
+//Login In local
 
 
 
