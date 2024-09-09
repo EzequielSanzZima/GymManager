@@ -59,7 +59,10 @@ const UserSchema = new Schema({
     },
     nextPayDate: {
         type: String,
-    }
+    },
+    lastAccess: {
+        type: String,
+    },
 });
 
 UserSchema.plugin(passportLocalMongoose, { usernameField: 'email' });

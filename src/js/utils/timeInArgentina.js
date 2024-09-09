@@ -6,4 +6,10 @@ const timeInArgentina = () => {
     return formattedDateTime;
 }
 
-module.exports = timeInArgentina;
+const DayInArgentina = () => {
+    const argentinaTime = moment.tz("America/Argentina/Buenos_Aires");
+    const formattedDateTime = argentinaTime.format('DD/MM/YYYY');
+    return formattedDateTime;
+}
+
+module.exports = { timeInArgentina, DayInArgentina };

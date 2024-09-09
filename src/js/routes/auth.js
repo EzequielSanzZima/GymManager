@@ -8,7 +8,8 @@ const passport = require('passport');
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-const timeInArgentina = require("../utils/timeInArgentina.js")
+const moment = require("moment")
+const { timeInArgentina, DayInArgentina } = require("../utils/timeInArgentina.js")
 
 // Manejar el registro de usuarios
 router.post("/register", upload.single('avatar'), async (req, res) => {
@@ -66,21 +67,21 @@ router.post("/register", upload.single('avatar'), async (req, res) => {
 router.post('/login', passport.authenticate('local') ,async (req, res) => {
     const { dni, password } = req.body;
 
-        // if (!dni || !password) {
-        //     req.flash('error_msg', 'DNI y contraseña son requeridos');
-        //     return res.redirect('/login');
-        // }
+        if (!dni || !password) {
+            req.flash('error_msg', 'DNI y contraseña son requeridos');
+            return res.redirect('/login');
+        }
 
     try {
         const user = await User.findOne({ dni });
         if (!user) {
-            req.flash('error_msg', 'No user found with this DNI');
+            req.flash('error_msg', 'No encontraron un usuario con ese DNI');
             return res.redirect('/login');
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            req.flash('error_msg', 'Invalid password');
+            req.flash('error_msg', 'Contrasena incorrecta');
             return res.redirect('/login');
         }
 
@@ -104,7 +105,7 @@ router.post('/login', passport.authenticate('local') ,async (req, res) => {
 });
 
 
-
+//Eliminar cuenta
 router.post('/delete-account', async (req, res) => {
     try {
         const userId = req.session.userId;
@@ -130,6 +131,7 @@ router.post('/delete-account', async (req, res) => {
     }
 });
 
+//cambiar contrasena
 router.post('/change-password', async (req, res) => {
     const { currentPassword, newPassword, confirmNewPassword } = req.body;
     console.log(currentPassword, newPassword, confirmNewPassword)
@@ -171,5 +173,44 @@ router.post('/change-password', async (req, res) => {
         res.status(500).json({ error: 'Ocurrió un error al cambiar la contraseña.' });
     }
 });
+
+//Verifica si el usuario puede entrar al local
+router.post('/verify-access', async (req, res) => {
+    const { dni } = req.body;
+
+    try {
+        const user = await User.findOne({ dni });
+
+        if (!user) {
+            req.flash('error_msg', 'Usuario no encontrado');
+            return res.redirect('/access');
+        }
+
+        const today = DayInArgentina();
+
+        if (user.lastAccess === today) {
+            req.flash('error_msg', 'Ya has accedido hoy, no puedes ingresar nuevamente.');
+            return res.redirect('/access');
+        }
+
+        const paymentDate = moment(user.paymentDate, 'DD/MM/YYYY');
+        const todayDate = moment(today, 'DD/MM/YYYY');
+
+        if (paymentDate.isBefore(todayDate)) {
+            req.flash('error_msg', 'Tu pase ha expirado, no puedes ingresar.');
+            return res.redirect('/access');
+        }
+
+        user.lastAccess = today;
+        await user.save();
+
+        res.render('accessSuccess', { user });
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send('Error en el servidor');
+    }
+});
+
 
 module.exports = router;

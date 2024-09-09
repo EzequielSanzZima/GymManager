@@ -104,6 +104,9 @@ router.get("/clients/:dni", ensureRole(['Secretario']), async (req, res) => {
 
 //Login In local
 
+router.get('/access',async (req, res) => {
+    res.render('access');
+});
 
 
 module.exports = router;

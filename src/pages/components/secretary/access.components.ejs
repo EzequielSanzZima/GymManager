@@ -1,0 +1,15 @@
+<div class="container mt-5">
+    <div id="errorAlert" class="alert alert-danger">
+        <% if (error_msg) { %>
+            <%= error_msg %>
+        <% } %>
+    </div>
+<form action="/verify-access" method="POST">
+    <div class="form-group">
+        <label for="dni">DNI</label>
+        <input type="text" class="form-control" id="dni" name="dni" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Verificar Acceso</button>
+</form>
+
+<script type="text/javascript" src="js/secretaryJS/access.js"></script>
